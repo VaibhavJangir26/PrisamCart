@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Roles {
+  customer
+  admin
+}
+
+model Users {
+  id         Int         @id @default(autoincrement())
+  name       String
+  email      String      @unique
+  created_at DateTime    @default(now())
+  role       Roles       @default(customer)
+  order      Orders[]
+  review     Reviews[]
+  cart_item  Cart_Item[]
+}
+
+model Categories {
+  id         Int        @id @default(autoincrement())
+  name       String
+  created_at DateTime   @default(now())
+  product    Products[]
+}
+
+model Orders {
+  id           Int          @id @default(autoincrement())
+  user_id      Int
+  user         Users        @relation(fields: [user_id], references: [id])
+  status       String       @db.VarChar(20)
+  total_amount Decimal
+  placed_at    DateTime     @default(now())
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @updatedAt()
+  order_item   Order_Item[]
+}
+
+model Products {
+  id          Int          @id @default(autoincrement())
+  name        String
+  desc        String
+  price       Decimal
+  category_id Int
+  category    Categories   @relation(fields: [category_id], references: [id])
+  review      Reviews[]
+  cart_item   Cart_Item[]
+  order_item  Order_Item[]
+  @@index([name])
+}
+
+model Order_Item {
+  id         Int      @id @default(autoincrement())
+  quantity   Int
+  product_id Int
+  order_id   Int
+  product    Products @relation(fields: [product_id], references: [id])
+  order      Orders   @relation(fields: [order_id], references: [id])
+
+  @@unique([product_id, order_id])
+}
+
+model Reviews {
+  id         Int      @id @default(autoincrement())
+  rating     Int      @default(2)
+  comments   String?
+  product_id Int
+  user_id    Int
+  product    Products @relation(fields: [product_id], references: [id])
+  user       Users    @relation(fields: [user_id], references: [id])
+
+  @@unique([product_id, user_id])
+}
+
+model Cart_Item {
+  id         Int      @id @default(autoincrement())
+  quantity   Int
+  added_at   DateTime @default(now())
+  user_id    Int
+  product_id Int
+  user       Users    @relation(fields: [user_id], references: [id])
+  product    Products @relation(fields: [product_id], references: [id])
+
+  @@unique([product_id, user_id])
+}
