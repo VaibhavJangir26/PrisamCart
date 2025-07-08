@@ -28,6 +28,8 @@ model Users {
   order      Orders[]
   review     Reviews[]
   cart_item  Cart_Item[]
+  wishlist   Wishlist[]
+  address    Address[]
 }
 
 model Categories {
@@ -47,6 +49,7 @@ model Orders {
   created_at   DateTime     @default(now())
   updated_at   DateTime     @updatedAt()
   order_item   Order_Item[]
+  payment      Payment[]
 }
 
 model Products {
@@ -59,6 +62,9 @@ model Products {
   review      Reviews[]
   cart_item   Cart_Item[]
   order_item  Order_Item[]
+  wishlist    Wishlist[]
+  discount    Discount[]
+
   @@index([name])
 }
 
@@ -95,4 +101,60 @@ model Cart_Item {
   product    Products @relation(fields: [product_id], references: [id])
 
   @@unique([product_id, user_id])
+}
+
+model Wishlist {
+  id         Int      @id @default(autoincrement())
+  added_at   DateTime @default(now())
+  user_id    Int
+  product_id Int
+  user       Users    @relation(fields: [user_id], references: [id])
+  product    Products @relation(fields: [product_id], references: [id])
+
+  @@unique([user_id, product_id])
+}
+
+model Discount {
+  id         Int      @id @default(autoincrement())
+  percentage Decimal
+  name       String
+  start_date DateTime
+  end_date   DateTime
+  product_id Int
+  product    Products @relation(fields: [product_id], references: [id])
+}
+
+model Address {
+  id          Int      @id @default(autoincrement())
+  is_deafult  Boolean  @default(true)
+  created_at  DateTime
+  addres_lane String
+  city        String
+  state       String
+  pincode     Int
+  user_id     Int      @unique
+  user        Users    @relation(fields: [user_id], references: [id])
+}
+
+enum PaymentStatus {
+  Failed
+  Successfull
+  Refunded
+}
+
+enum PaymentMethods {
+  UPI
+  NetBanking
+  Card
+  COD
+}
+
+model Payment {
+  id             Int            @id @default(autoincrement())
+  paid_at        DateTime
+  transaction_id String
+  payment        PaymentStatus
+  payment_method PaymentMethods
+  order_id       Int
+  order Orders @relation(fields: [order_id], references: [id])
 }
