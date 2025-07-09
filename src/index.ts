@@ -6,7 +6,7 @@ dotenv.config();
 
 const limit = rateLimit({ 
     windowMs: 60*1000*1, 
-    limit: 5,
+    max: 100,
     standardHeaders: 'draft-8',
     legacyHeaders:false,
 })
@@ -14,18 +14,23 @@ const limit = rateLimit({
 const port:string|number = process.env.PORT_NO || 4000;
 const app=express();
 app.use(express.json());
-app.use(limit);
+// app.use(limit);
 
 import userRouter from './routers/user_route';
 import reviewRouter from "./routers/review_router";
 import pdtRouter from "./routers/product_router";
+import authRouter from "./routers/auth_router";
 import { logger } from './middleware/logger';
+
+
 
 
 app.use(logger);
 app.use("/users",userRouter);
 app.use("/review",reviewRouter);
 app.use("/pdt",pdtRouter);
+
+app.use("/auth",authRouter)
 
 
 

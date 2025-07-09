@@ -14,17 +14,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Roles {
-  customer
-  admin
+
+model Role {
+  id   Int     @id @default(autoincrement())
+  role_name String  @unique
+  user Users[]
 }
 
 model Users {
   id         Int         @id @default(autoincrement())
   name       String
   email      String      @unique
-  created_at DateTime    @default(now())
-  role       Roles       @default(customer)
+  password   String
+  created_at DateTime?    @default(now())
+  role_id    Int         
+  role       Role        @relation(fields: [role_id], references: [id])
   order      Orders[]
   review     Reviews[]
   cart_item  Cart_Item[]
@@ -156,5 +160,5 @@ model Payment {
   payment        PaymentStatus
   payment_method PaymentMethods
   order_id       Int
-  order Orders @relation(fields: [order_id], references: [id])
+  order          Orders         @relation(fields: [order_id], references: [id])
 }

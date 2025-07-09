@@ -5,7 +5,7 @@ const prisma=new PrismaClient();
 
 
 
-export const getAllUser=async(req:Request,res:Response)=>{
+export const getAllUser=async(req:Request,res:Response):Promise<void> =>{
     try {
         const data = await prisma.users.findMany({});
         res.status(200).json({mgs:"success",data: data});
@@ -14,7 +14,7 @@ export const getAllUser=async(req:Request,res:Response)=>{
     }
 }
 
-export const updateUser = async (req: Request, res: Response) => {
+export const updateUser = async (req: Request, res: Response):Promise<void>  => {
     try {
         const { id: userId } = req.params;
 
@@ -32,7 +32,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
 
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response):Promise<void>  => {
     try {
         const { id: userId } = req.params;
         const user = await prisma.users.delete({

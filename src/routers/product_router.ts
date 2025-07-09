@@ -4,6 +4,8 @@ import { getAllProducts,getProductById,updateProduct,deleteProduct,filterPdt} fr
 
 import { z } from 'zod';
 import { zodValidation } from '../middleware/zod_validate';
+import { validationAccessToken } from '../middleware/access_token_checker';
+import { roleAuth } from '../middleware/role_auth';
 
 const pdtValidation = z.object({
     pirce: z.number().min(1, "price is required"),
@@ -11,10 +13,11 @@ const pdtValidation = z.object({
     name: z.string().min(1, "name is required"),
 })
 
+import { roles } from '../utils/roles';
 
 const router = express.Router();
 
-router.get("/",getAllProducts);
+router.get("/",validationAccessToken,roleAuth([roles.Customer]),getAllProducts);
 router.get("/id/:id",getProductById);
 router.put("/update/id/:id",zodValidation(pdtValidation),updateProduct);
 router.delete("/delete/id/:id",deleteProduct);

@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 
 
-export const getAllProducts = async (req: Request, res: Response) => {
+export const getAllProducts = async (req: Request, res: Response):Promise<void>  => {
     try {
         const pdt = await prisma.products.findMany({});
         res.status(200).json({ msg: "all pdt", data: pdt })
@@ -14,7 +14,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
 }
 
 
-export const getProductById = async (req: Request, res: Response) => {
+export const getProductById = async (req: Request, res: Response):Promise<void>  => {
     try {
         const { id: pdtId } = req.params;
         const pdt = await prisma.products.findUnique({
@@ -30,7 +30,7 @@ export const getProductById = async (req: Request, res: Response) => {
 
 
 
-export const updateProduct = async (req: Request, res: Response) => {
+export const updateProduct = async (req: Request, res: Response):Promise<void>  => {
     try {
         const { id: reviewId } = req.params;
 
@@ -48,7 +48,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
 
 
-export const deleteProduct = async (req: Request, res: Response) => {
+export const deleteProduct = async (req: Request, res: Response):Promise<void>  => {
     try {
         const { id: pdtId } = req.params;
         const pdt = await prisma.products.delete({
@@ -62,7 +62,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
     }
 }
 
-export const filterPdt = async (req: Request, res: Response) => {
+export const filterPdt = async (req: Request, res: Response):Promise<void>  => {
     try {
         const { search, limit } = req.query;
         let pdt = await prisma.products.findMany({});

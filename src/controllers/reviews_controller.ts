@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 
 
-export const getAllReviews = async (req: Request, res: Response) => {
+export const getAllReviews = async (req: Request, res: Response):Promise<void>  => {
     try {
         const review = await prisma.reviews.findMany({});
         res.status(200).json({ msg: "all reviews", data: review })
@@ -14,7 +14,7 @@ export const getAllReviews = async (req: Request, res: Response) => {
 }
 
 
-export const getReviewById = async (req: Request, res: Response) => {
+export const getReviewById = async (req: Request, res: Response) :Promise<void> => {
     try {
         const { id: reviewId } = req.params;
         const review = await prisma.reviews.findUnique({
@@ -30,7 +30,7 @@ export const getReviewById = async (req: Request, res: Response) => {
 
 
 
-export const updateReview = async (req: Request, res: Response) => {
+export const updateReview = async (req: Request, res: Response):Promise<void>  => {
     try {
         const { id: reviewId } = req.params;
 
@@ -48,7 +48,7 @@ export const updateReview = async (req: Request, res: Response) => {
 
 
 
-export const deleteReview = async (req: Request, res: Response) => {
+export const deleteReview = async (req: Request, res: Response):Promise<void>  => {
     try {
         const { id: reviewId } = req.params;
         const review = await prisma.reviews.delete({
