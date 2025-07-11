@@ -1,21 +1,84 @@
-🚀 Project Drop: “PrismaCart” – A Modern E-Commerce Backend Built with ❤️ using TypeScript + Express + PostgreSQL! 🛍️
+# 🚀 PrismaCart – Modern E-Commerce Backend with TypeScript, PostgreSQL & JWT Auth
 
-I’ve just wrapped up a fully functional backend project designed for e-commerce applications — clean, fast, and developer-ready! Whether you’re building with Flutter or managing scalable web apps, this backend is built to plug in and go.
+Welcome to **PrismaCart** — a scalable, real-world e-commerce backend built for speed, structure, and security. Whether you're building cross-platform apps with **Flutter** or managing a high-scale frontend, PrismaCart is plug-and-play ready.
 
-🧰 Tech Behind the Scenes:
-🟦 TypeScript – because strong types = fewer bugs
+---
 
-⚙️ Express.js – lightweight, fast, and flexible
+## 🧱 Tech Stack
 
-🌐 Prisma ORM – powerful & readable DB access with PostgreSQL
+| Tech           | Purpose                                  |
+|----------------|------------------------------------------|
+| 🟦 TypeScript | Strong types = fewer runtime bugs        |
+| ⚙️ Express.js | Fast, minimalist web framework           |
+| 🌐 Prisma     | Type-safe ORM for PostgreSQL             |
+| 🐘 PostgreSQL | Robust relational database               |
+| 🔐 JWT        | Authentication & authorization           |
+| 🧠 Redis      | Caching & token/session optimization     |
 
-🐘 PostgreSQL – scalable and rock-solid relational database
+---
 
-🔧 What’s Inside?
-✅ Full CRUD APIs for Products
-✅ Clean MVC structure for maintainability
-✅ Category & pricing logic built-in
-✅ Optimized for mobile devs (especially Flutter 📱)
-✅ Ready to plug into your frontend — no config mess!
+## 🔐 Authentication & Security Features
 
-As a Flutter & backend developer, I wanted a real-world e-commerce starter that balances speed, structure, and simplicity. Something you can pick up, read in minutes, and ship in days.
+- **JWT Access Tokens** – Valid for 15 minutes
+- **Refresh Tokens** – Stored securely in DB, valid for 7 days
+- **RBAC** – Role-based access (Admin, Seller, Customer)
+- **Logout Flow** – Deletes refresh token from DB
+- **Token Rotation** – New access token issued via refresh route
+- **Redis Caching** – Speed up repeated DB queries
+- **Rate Limiting (Optional)** – Prevent refresh token abuse
+
+---
+
+## 📦 Features
+
+- ✅ Full **CRUD APIs** for Products, Categories, and Users
+- ✅ Modular **MVC Structure**
+- ✅ Role-restricted routes using middleware
+- ✅ Category filtering, price logic, and data validations
+- ✅ Production-ready JWT + Refresh Token Auth Flow
+- ✅ Redis-backed cache layer for performance boost
+- ✅ Secure, scalable codebase designed for mobile (especially **Flutter**)
+
+---
+
+## 📁 Project Structure
+
+/src
+├── controllers // Route logic
+
+├── routes // Express routes
+
+├── middleware // Auth, role checks, rate limiting
+
+├── services // Business logic, token service, cache
+
+├── utils // JWT helpers, custom error handling
+
+├── prisma // Prisma schema + DB setup
+
+└── index.ts // Main Express setup
+
+
+
+## 🔄 Refresh Token Logic
+
+- Access token expires in 15 minutes.
+- Refresh token is used to request a new access token.
+- Optional: apply **rate limit** to prevent abuse.
+- On logout, refresh token is deleted from the database.
+
+---
+
+## 🚀 Getting Started
+
+```bash
+git clone https://github.com/VaibhavJangir26/prismacart.git
+cd prismacart
+npm install
+
+# Setup .env with your DB URL, JWT secrets, etc.
+
+npx prisma generate
+npx prisma migrate dev --name init
+
+npm run dev
