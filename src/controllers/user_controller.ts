@@ -14,6 +14,21 @@ export const getAllUser=async(req:Request,res:Response):Promise<void> =>{
     }
 }
 
+export const getMyProfile=async(req:Request,res:Response):Promise<void> =>{
+    try {
+        const {id:myId}=req.params;
+
+        const mydata = await prisma.users.findUnique({
+            where :{
+                id: parseInt(myId)
+            }
+        });
+        res.status(200).json({mgs:"my profile",data: mydata});
+    } catch (error) {
+        res.status(500).json({msg:error})
+    }
+}
+
 export const updateUser = async (req: Request, res: Response):Promise<void>  => {
     try {
         const { id: userId } = req.params;

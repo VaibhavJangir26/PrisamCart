@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getAllUser,updateUser,deleteUser } from '../controllers/user_controller';
+import { getAllUser,updateUser,deleteUser,getMyProfile } from '../controllers/user_controller';
 
 const router=express.Router();
 
@@ -15,9 +15,16 @@ const userSchema= z.object({
 })
 
 
-router.get("/",getAllUser)
-router.put("/update/id/:id",zodValidation(userSchema),updateUser)
-router.delete("/delete/id/:id",deleteUser)
+import { roleAuth } from '../middleware/role_auth';
+import { validationAccessToken } from '../middleware/access_token_checker';
+import { roles } from '../utils/roles';
+
+router.get("/",validationAccessToken,roleAuth([roles.Admin]),getAllUser)
+
+router.get("/myprofile/id/:id",validationAccessToken,roleAuth([roles.Customer]),getMyProfile)
+
+router.put("/update/id/:id",zodValidation(userSchema),validationAccessToken,roleAuth([roles.Customer]),updateUser)
+router.delete("/delete/id/:id",validationAccessToken,roleAuth([roles.Admin,roles.Customer]),deleteUser)
 
 
 

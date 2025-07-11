@@ -6,8 +6,8 @@ import { z } from 'zod';
 import { zodValidation } from '../middleware/zod_validate';
 
 const reviewValidate = z.object({
-    rating: z.number().min(1, "rating is required"),
-    comments: z.string(),
+    rating: z.number().optional(),
+    comments: z.string().optional(),
     product_id: z.number().int("prodcut_id is required"),
     user_id: z.number().int("user_id is required")
 })

@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  // output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,11 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Role {
-  id   Int     @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   role_name String  @unique
-  user Users[]
+  user      Users[]
+}
+
+model Token {
+  id            Int       @id @default(autoincrement())
+  refresh_token String    @unique
+  created_at    DateTime  @default(now())
+  expire_at     DateTime?
+  user_id       Int
+  user          Users     @relation(fields: [user_id], references: [id])
 }
 
 model Users {
@@ -26,14 +27,15 @@ model Users {
   name       String
   email      String      @unique
   password   String
-  created_at DateTime?    @default(now())
-  role_id    Int         
+  created_at DateTime?   @default(now())
+  role_id    Int
   role       Role        @relation(fields: [role_id], references: [id])
   order      Orders[]
   review     Reviews[]
   cart_item  Cart_Item[]
   wishlist   Wishlist[]
   address    Address[]
+  token      Token[]
 }
 
 model Categories {
@@ -131,12 +133,12 @@ model Discount {
 model Address {
   id          Int      @id @default(autoincrement())
   is_deafult  Boolean  @default(true)
-  created_at  DateTime
+  created_at  DateTime @default(now())
   addres_lane String
   city        String
   state       String
   pincode     Int
-  user_id     Int      @unique
+  user_id     Int
   user        Users    @relation(fields: [user_id], references: [id])
 }
 

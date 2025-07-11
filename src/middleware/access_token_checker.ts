@@ -9,7 +9,7 @@ export const validationAccessToken = async (req: Request, res: Response, next: N
         if (!authHeader) res.status(400).json({ msg: "token is required" });
         const token = authHeader.split(" ")[1];
 
-        const decode = jwt.verify(token, process.env.JWT_Secret!)
+        const decode = jwt.verify(token, process.env.jwt_access_secret!)
         req.user = decode;
         next();
 
